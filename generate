@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.unshift 'lib'
 require 'room'
-require 'floor'
 require 'merger'
 
 TOKENS = {
@@ -20,9 +19,9 @@ def format(floor)
   end
 end
 
-floor = Generate::Room.gen(4, 6)
-floor = Generate::Floor.place(:overwrite, floor, Generate::Room.gen(4, 4), -3, -5)
-floor = Generate::Floor.place(:overwrite, floor, Generate::Room.gen(7, 3), 9, 5)
-floor = Generate::Floor.place(:merge, floor, Generate::Room.gen(10, 6), 2, 1)
-floor = Generate::Floor.pad(floor, 1, 2, 3, 4)
+floor = Generate::Room.rect(4, 6)
+floor = Generate::Room.place(:overwrite, floor, Generate::Room.rect(4, 4), -3, -5)
+floor = Generate::Room.place(:overwrite, floor, Generate::Room.rect(7, 3), 9, 5)
+floor = Generate::Room.place(:merge, floor, Generate::Room.rect(10, 6), 2, 1)
+floor = Generate::Room.pad(floor, 1, 2, 3, 4)
 format(floor)
