@@ -2,6 +2,7 @@
 $LOAD_PATH.unshift 'lib'
 require 'room'
 require 'floor'
+require 'merger'
 
 TOKENS = {
   -1 => '.',
@@ -20,10 +21,8 @@ def format(floor)
 end
 
 floor = Generate::Room.gen(4, 6)
-floor = Generate::Floor.place(floor, Generate::Room.gen(4, 4), -3, -5)
-floor = Generate::Floor.place(floor, Generate::Room.gen(7, 3), 9, 5)
-floor = Generate::Floor.add_columns_left(floor, 3)
-floor = Generate::Floor.add_columns_right(floor, 2)
-floor = Generate::Floor.add_rows_top(floor, 1)
-floor = Generate::Floor.add_rows_bottom(floor, 4)
+floor = Generate::Floor.place(:overwrite, floor, Generate::Room.gen(4, 4), -3, -5)
+floor = Generate::Floor.place(:overwrite, floor, Generate::Room.gen(7, 3), 9, 5)
+floor = Generate::Floor.place(:merge, floor, Generate::Room.gen(10, 6), 2, 1)
+floor = Generate::Floor.pad(floor, 1, 2, 3, 4)
 format(floor)
