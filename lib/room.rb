@@ -8,6 +8,7 @@ module Room
   end
 
   def self.trim(room)
+    room
   end
 
   def self.place(op, r1, r2, x, y)
