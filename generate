@@ -9,9 +9,9 @@ TOKENS = {
   1 => 'X'
 }
 
-def format(level)
-  w, h = level[0..1]
-  level[2..-1].each_slice(w) do |row|
+def format(floor)
+  w, h = floor[0..1]
+  floor[2..-1].each_slice(w) do |row|
     row.each do |cell|
       print TOKENS[cell]
     end
@@ -19,7 +19,9 @@ def format(level)
   end
 end
 
-floor = Generate::Room.gen(6, 6)
+floor = Generate::Room.gen(4, 6)
+floor = Generate::Floor.place(floor, Generate::Room.gen(4, 4), -3, -5)
+floor = Generate::Floor.place(floor, Generate::Room.gen(7, 3), 9, 5)
 floor = Generate::Floor.add_columns_left(floor, 3)
 floor = Generate::Floor.add_columns_right(floor, 2)
 floor = Generate::Floor.add_rows_top(floor, 1)

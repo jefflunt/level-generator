@@ -1,20 +1,32 @@
 module Generate
   module Floor
     def self.place(floor, room, x, y)
-      # how many rows to add to the top?
-      # how many rows to add to the bottom?
-      # how many columns to add to the left?
-      # how many columns to add to the right?
-      # add all the new rows and columns
-      # copy the existing floor into the new floor
-      # place the new room
       fw, fh = floor[0..1]
       rw, rh = room[0..1]
 
-      (floor = add_columns_left(floor, -x))       if x < 0
-      (floor = add_columns_right(floor, x + rw))  if x + rw > fw
-      (floor = add_rows_top(floor, -y))           if y < 0
-      (floor = add_rows_bottom(floor, y + rh))    if y + rh > fh
+      new_floor = copy(floor)
+
+      (new_floor = add_columns_left(new_floor, -x))           if x < 0
+      (new_floor = add_columns_right(new_floor, x - fw + rw)) if x + rw > fw
+      (new_floor = add_rows_top(new_floor, -y))               if y < 0
+      (new_floor = add_rows_bottom(new_floor, y - fh + rh))   if y + rh > fh
+
+      new_fw, new_fh = new_floor[0..1]
+
+      x = [0, x].max
+      y = [0, y].max
+
+      room[2..-1].each_slice(rw) do |room_row|
+        i = 2 + (y * new_fw) + x
+        new_floor[i..(i + rw - 1)] = room_row
+        y = y + 1
+      end
+
+      new_floor
+    end
+
+    def self.copy(floor)
+      Marshal.load(Marshal.dump(floor))
     end
 
     def self.add_columns_left(floor, count)
