@@ -8,48 +8,51 @@ module Generate
       r.flatten
     end
 
-    def self.place(op, floor, room, x, y)
-      fw, fh = floor[0..1]
-      rw, rh = room[0..1]
+    def self.trim(room)
+    end
 
-      new_floor = expand(copy(floor), room, x, y)
-      new_fw, new_fh = new_floor[0..1]
+    def self.place(op, r1, r2, x, y)
+      fw, fh = r1[0..1]
+      rw, rh = r2[0..1]
+
+      new_r1 = expand(copy(r1), r2, x, y)
+      new_fw, new_fh = new_r1[0..1]
 
       x = [0, x].max
       y = [0, y].max
-      room[2..-1].each_slice(rw) do |room_row|
+      r2[2..-1].each_slice(rw) do |r2_row|
         i = 2 + (y * new_fw) + x
-        floor_range = i..(i + rw - 1)
-        floor_row = new_floor[floor_range]
-        new_floor[floor_range] = Merger.send(op, floor_row, room_row)
+        r1_range = i..(i + rw - 1)
+        r1_row = new_r1[r1_range]
+        new_r1[r1_range] = Merger.send(op, r1_row, r2_row)
         y = y + 1
       end
 
-      new_floor
+      new_r1
     end
 
-    def self.expand(floor, room, x, y)
-      fw, fh = floor[0..1]
-      rw, rh = room[0..1]
-      new_floor = copy(floor)
+    def self.expand(r1, r2, x, y)
+      fw, fh = r1[0..1]
+      rw, rh = r2[0..1]
+      new_r1 = copy(r1)
 
-      (new_floor = pad_lft(new_floor, -x))          if x < 0
-      (new_floor = pad_rgt(new_floor, x - fw + rw)) if x + rw > fw
-      (new_floor = pad_top(new_floor, -y))          if y < 0
-      (new_floor = pad_bot(new_floor, y - fh + rh)) if y + rh > fh
+      (new_r1 = pad_lft(new_r1, -x))          if x < 0
+      (new_r1 = pad_rgt(new_r1, x - fw + rw)) if x + rw > fw
+      (new_r1 = pad_top(new_r1, -y))          if y < 0
+      (new_r1 = pad_bot(new_r1, y - fh + rh)) if y + rh > fh
 
-      new_floor
+      new_r1
     end
 
-    def self.copy(floor)
-      Marshal.load(Marshal.dump(floor))
+    def self.copy(room)
+      Marshal.load(Marshal.dump(room))
     end
 
-    def self.pad(floor, t, r, b, l)
+    def self.pad(room, t, r, b, l)
       pad_top(
         pad_rgt(
           pad_bot(
-            pad_lft(floor, l),
+            pad_lft(room, l),
             b
           ),
           r
@@ -58,54 +61,54 @@ module Generate
       )
     end
 
-    def self.pad_lft(floor, count)
-      new_floor = []
-      orig_fw = floor[0]
+    def self.pad_lft(room, count)
+      new_room = []
+      orig_fw = room[0]
       new_fw = orig_fw + count
-      new_fh = floor[1]
+      new_fh = room[1]
 
-      floor[2..-1].each_slice(orig_fw){|row| new_floor << ([-1] * count) + row }
+      room[2..-1].each_slice(orig_fw){|row| new_room << ([-1] * count) + row }
 
-      new_floor.unshift([new_fw, new_fh])
-      new_floor.flatten
+      new_room.unshift([new_fw, new_fh])
+      new_room.flatten
     end
 
-    def self.pad_rgt(floor, count)
-      new_floor = []
-      orig_fw = floor[0]
+    def self.pad_rgt(room, count)
+      new_room = []
+      orig_fw = room[0]
       new_fw = orig_fw + count
-      new_fh = floor[1]
+      new_fh = room[1]
 
-      floor[2..-1].each_slice(orig_fw){|row| new_floor << row + ([-1] * count) }
+      room[2..-1].each_slice(orig_fw){|row| new_room << row + ([-1] * count) }
 
-      new_floor.unshift([new_fw, new_fh])
-      new_floor.flatten
+      new_room.unshift([new_fw, new_fh])
+      new_room.flatten
     end
 
-    def self.pad_top(floor, count)
-      new_floor = []
-      new_fw = floor[0]
-      new_fh = floor[1] + count
+    def self.pad_top(room, count)
+      new_room = []
+      new_fw = room[0]
+      new_fh = room[1] + count
       new_row = [-1] * new_fw
 
-      new_floor << new_row * count
-      floor[2..-1].each_slice(new_fw){|row| new_floor << row }
+      new_room << new_row * count
+      room[2..-1].each_slice(new_fw){|row| new_room << row }
 
-      new_floor.unshift([new_fw, new_fh])
-      new_floor.flatten
+      new_room.unshift([new_fw, new_fh])
+      new_room.flatten
     end
 
-    def self.pad_bot(floor, count)
-      new_floor = []
-      new_fw = floor[0]
-      new_fh = floor[1] + count
+    def self.pad_bot(room, count)
+      new_room = []
+      new_fw = room[0]
+      new_fh = room[1] + count
       new_row = [-1] * new_fw
 
-      floor[2..-1].each_slice(new_fw){|row| new_floor << row }
-      new_floor << new_row * count
+      room[2..-1].each_slice(new_fw){|row| new_room << row }
+      new_room << new_row * count
 
-      new_floor.unshift([new_fw, new_fh])
-      new_floor.flatten
+      new_room.unshift([new_fw, new_fh])
+      new_room.flatten
     end
   end
 end
