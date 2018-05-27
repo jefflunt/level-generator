@@ -1,5 +1,21 @@
 #!/usr/bin/env ruby
+$LOAD_PATH.unshift 'lib'
+require 'room'
 
-level = '.'
+TOKENS = {
+  -1 => ' ',
+  0 => '.',
+  1 => 'X'
+}
 
-puts level
+def format(level)
+  w, h = level[0], level[1]
+  level[2..-1].each_slice(w) do |s|
+    s.each do |c|
+      print TOKENS[c]
+    end
+    puts
+  end
+end
+
+format(Generate::Room.gen(6, 6))
