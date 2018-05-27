@@ -19,9 +19,10 @@ def format(floor)
   end
 end
 
-floor = Generate::Room.rect(4, 6)
-floor = Generate::Room.place(:overwrite, floor, Generate::Room.rect(4, 4), -3, -5)
-floor = Generate::Room.place(:overwrite, floor, Generate::Room.rect(7, 3), 9, 5)
-floor = Generate::Room.place(:merge, floor, Generate::Room.rect(10, 6), 2, 1)
-floor = Generate::Room.pad(floor, 1, 2, 3, 4)
+floor = Room.rect(4, 6)
+floor = Room.place(:overwrite, floor, Room.rect(4, 4), -3, -5)
+floor = Room.place(:overwrite, floor, Room.rect(7, 3), 9, 5)
+floor = Room.place(:merge, floor, Room.rect(10, 6), 2, 1)
+floor = Room.pad(floor, 1, 2, 3, 4)
+format(floor)
 format(floor)
