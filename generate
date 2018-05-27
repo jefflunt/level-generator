@@ -19,14 +19,24 @@ def format(floor)
   end
 end
 
-floor = Room.rect(4, 6)
-format(floor)
-floor = Room.place(:overwrite, floor, Room.rect(4, 4), -3, -5)
-format(floor)
-floor = Room.place(:overwrite, floor, Room.rect(7, 3), 9, 5)
-format(floor)
-floor = Room.place(:merge, floor, Room.rect(10, 6), 2, 1)
-format(floor)
-floor = Room.pad(floor, 1, 2, 3, 4)
-format(floor)
-format(Room.trim(floor))
+room = Room.rect(4, 6)
+format(room)
+room = Room.place(:overwrite, room, Room.rect(4, 4), -3, -5)
+format(room)
+room = Room.place(:overwrite, room, Room.rect(7, 3), 9, 5)
+format(room)
+room = Room.place(:merge, room, Room.rect(10, 6), 2, 1)
+format(room)
+room = Room.pad(room, 1, 2, 3, 4)
+format(room)
+puts "EL: #{Room.empty_lft?(room)}"
+puts "ER: #{Room.empty_rgt?(room)}"
+puts "ET: #{Room.empty_top?(room)}"
+puts "EB: #{Room.empty_bot?(room)}"
+
+room = Room.trim(room)
+format(Room.trim(room))
+puts "EL: #{Room.empty_lft?(room)}"
+puts "ER: #{Room.empty_rgt?(room)}"
+puts "ET: #{Room.empty_top?(room)}"
+puts "EB: #{Room.empty_bot?(room)}"

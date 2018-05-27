@@ -7,10 +7,6 @@ module Room
     r.flatten
   end
 
-  def self.trim(room)
-    room
-  end
-
   def self.place(op, r1, r2, x, y)
     fw, fh = r1[0..1]
     rw, rh = r2[0..1]
@@ -42,6 +38,17 @@ module Room
     (new_r1 = pad_bot(new_r1, y - fh + rh)) if y + rh > fh
 
     new_r1
+  end
+
+  def self.trim(room)
+    nr = copy(room)
+
+    nr = del_lft(nr) while empty_lft?(nr)
+    nr = del_rgt(nr) while empty_rgt?(nr)
+    nr = del_top(nr) while empty_top?(nr)
+    nr = del_bot(nr) while empty_bot?(nr)
+
+    nr
   end
 
   def self.copy(room)
@@ -109,5 +116,57 @@ module Room
 
     new_room.unshift([new_fw, new_fh])
     new_room.flatten
+  end
+
+  def self.del_lft(room)
+    rw, rh = room[0..1]
+    new_room = []
+
+    room[2..-1].each_slice(rw) do |row|
+      new_room << row[1..-1]
+    end
+
+    new_room.unshift([rw - 1, rh]).flatten
+  end
+
+  def self.del_rgt(room)
+    rw, rh = room[0..1]
+    new_room = []
+
+    room[2..-1].each_slice(rw) do |row|
+      new_room << row[0..-2]
+    end
+
+    new_room.unshift([rw - 1, rh]).flatten
+  end
+
+  def self.del_top(room)
+    rw, rh = room[0..1]
+    [[rw, rh - 1], room[(2 + rw)..-1]].flatten
+  end
+
+  def self.del_bot(room)
+    rw, rh = room[0..1]
+    [[rw, rh - 1], room[2..(-rw - 1)]].flatten
+  end
+
+  def self.empty_lft?(room)
+    rw = room[0]
+    room[2..-1].each_slice(rw).all?{|row| row[0] == -1 }
+  end
+
+  def self.empty_rgt?(room)
+    rw = room[0]
+    room[2..-1].each_slice(rw).all?{|row| row[-1] == -1 }
+  end
+
+  def self.empty_top?(room)
+    rw = room[0]
+    room[2..-1].each_slice(rw).first.all?{|cell| cell == -1 }
+  end
+
+  def self.empty_bot?(room)
+    rw = room[0]
+    room[-rw..-1].all?{|cell| cell == -1 }
   end
 end
