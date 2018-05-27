@@ -1,21 +1,27 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.unshift 'lib'
 require 'room'
+require 'floor'
 
 TOKENS = {
-  -1 => ' ',
-  0 => '.',
+  -1 => '.',
+  0 => ' ',
   1 => 'X'
 }
 
 def format(level)
-  w, h = level[0], level[1]
-  level[2..-1].each_slice(w) do |s|
-    s.each do |c|
-      print TOKENS[c]
+  w, h = level[0..1]
+  level[2..-1].each_slice(w) do |row|
+    row.each do |cell|
+      print TOKENS[cell]
     end
     puts
   end
 end
 
-format(Generate::Room.gen(6, 6))
+floor = Generate::Room.gen(6, 6)
+floor = Generate::Floor.add_columns_left(floor, 3)
+floor = Generate::Floor.add_columns_right(floor, 2)
+floor = Generate::Floor.add_rows_top(floor, 1)
+floor = Generate::Floor.add_rows_bottom(floor, 4)
+format(floor)
