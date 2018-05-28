@@ -3,20 +3,4 @@ $LOAD_PATH.unshift 'lib'
 require 'room'
 require 'merger'
 
-TOKENS = {
-  -1 => '.',
-  0 => ' ',
-  1 => 'X'
-}
-
-def format(floor)
-  w, h = floor[0..1]
-  floor[2..-1].each_slice(w) do |row|
-    row.each do |cell|
-      print TOKENS[cell]
-    end
-    puts
-  end
-end
-
-format(Room.gen(10, 4..15, 4..15, 4))
+Room.dump(Room.gen(10, 4..15, 4..15, 4))

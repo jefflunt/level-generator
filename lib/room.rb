@@ -1,4 +1,10 @@
 module Room
+  TOKENS = {
+    -1 => '.',
+    0 => ' ',
+    1 => 'X'
+  }
+
   ##
   # r - int, number of rectangles to add
   # wr - Range, width range
@@ -19,6 +25,16 @@ module Room
     end
 
     room
+  end
+
+  def self.dump(room)
+    w, h = room[0..1]
+    room[2..-1].each_slice(w) do |row|
+      row.each do |cell|
+        print TOKENS[cell]
+      end
+      puts
+    end
   end
 
   def self.rect(w, h)
