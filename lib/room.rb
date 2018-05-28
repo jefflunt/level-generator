@@ -9,8 +9,8 @@ module Room
   # r - int, number of rectangles to add
   # wr - Range, width range
   # hr - Range, height range
-  # xr - Range, possible x jitter
-  # yr - Range, possible y jitter
+  # xr - Range, possible x offsets
+  # yr - Range, possible y offsets
   def self.gen(r, wr, hr, xr, yr)
     room = rect(rand(wr), rand(hr))
 
