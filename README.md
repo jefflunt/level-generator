@@ -9,7 +9,13 @@ Randomly generate a room by calling `Room::gen`
 * `xr` - `Range`, `x` range - the range of x offsets
 * `yr` - `Range`, `x` range - the range of x offsets
 
-The ratio of `xr` to `yr` can also suggest a general direction for the
-rectangles to travel, similiar to the slope of a line. You'll notice that the
-closer this range is to width / height ranges, the more clumped together the
-generated rectangles will be.
+The ratio of `xr` to `yr` can also suggest a general direction (or lack of
+direction) for the rectangles to travel, sort of like the slope of a line.
+
+* The closer the `xr` / `yr` ranges are to the `wr` / `hr` ranges respectively,
+  the more clumpy the room will be.
+* Very low `xr` / `yr` ranges (i.e. try setting them to a fixed `1..1`) will
+  result in the rectangles being generated along a very clear line.
+* Finally, if the `xr` / `yr` ranges' top end extend quite a bit beyond the `wr`
+  / `hr` ranges, you'll notice that more chaotic rooms result, often with rooms
+  within rooms that don't touch one another.
