@@ -3,4 +3,4 @@ $LOAD_PATH.unshift 'lib'
 require 'room'
 require 'merger'
 
-Room.dump(Room.gen(10, 4..15, 4..15, 4))
+Room.dump(Room.gen(30, 6..7, 6..7, 2..30, 3..30))
