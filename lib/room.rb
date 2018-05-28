@@ -1,4 +1,26 @@
 module Room
+  ##
+  # r - int, number of rectangles to add
+  # wr - Range, width range
+  # hr - Range, height range
+  # j - int, jitter (how far off center to place each rect)
+  def self.gen(r, wr, hr, j)
+    room = rect(rand(wr), rand(hr))
+
+    (r - 1).times do |i|
+      room_2 = rect(rand(wr), rand(hr))
+      room = place(
+        :merge,
+        room,
+        room_2,
+        rand(-j..j),
+        rand(-j..j)
+      )
+    end
+
+    room
+  end
+
   def self.rect(w, h)
     r = [w, h]
     r << [1] * w
