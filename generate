@@ -11,3 +11,5 @@ puts "\n---\n"
 Room.dump(Room.vflip(room))
 puts "\n---\n"
 Room.dump(Room.transpose(room))
+puts "\n---\n"
+Room.dump(Room.xtranspose(room))

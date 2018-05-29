@@ -77,10 +77,16 @@ module Room
     transpose(hflip(transpose(room)))
   end
 
+  # Normal transpose, rows to columns, along the top-left-to-bottom-right axis
   def self.transpose(room)
     rw, rh = room[0..1]
 
     new_room = room[2..-1].each_slice(rw).map{|row| row}.transpose.unshift([rh, rw]).flatten
+  end
+
+  # Cross transpose, rows to columns, along the top-right-to-bottom-left axis
+  def self.xtranspose(room)
+    hflip(transpose(hflip(room)))
   end
 
   def self.expand(r1, r2, x, y)
