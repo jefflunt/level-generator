@@ -66,6 +66,23 @@ module Room
     new_r1
   end
 
+  def self.hflip(room)
+    rw, rh = room[0..1]
+
+    new_room = room[2..-1].each_slice(rw).map{|row| row.reverse}
+    new_room.unshift([rw, rh]).flatten
+  end
+
+  def self.vflip(room)
+    transpose(hflip(transpose(room)))
+  end
+
+  def self.transpose(room)
+    rw, rh = room[0..1]
+
+    new_room = room[2..-1].each_slice(rw).map{|row| row}.transpose.unshift([rh, rw]).flatten
+  end
+
   def self.expand(r1, r2, x, y)
     fw, fh = r1[0..1]
     rw, rh = r2[0..1]

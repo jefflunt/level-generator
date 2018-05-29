@@ -3,4 +3,11 @@ $LOAD_PATH.unshift 'lib'
 require 'room'
 require 'merger'
 
-Room.dump(Room.gen(30, 3..9, 3..9, 2..12, 3..12))
+room = Room.gen(10, 3..9, 3..9, 2..12, 3..12)
+Room.dump(room)
+puts "\n---\n"
+Room.dump(Room.hflip(room))
+puts "\n---\n"
+Room.dump(Room.vflip(room))
+puts "\n---\n"
+Room.dump(Room.transpose(room))
