@@ -28,6 +28,22 @@ module Room
     room
   end
 
+  def self.north_edge(r)
+    r[2..-1].each_slice(r[0]).first
+  end
+
+  def self.east_edge(r)
+    r[2..-1].each_slice(r[0]).collect{|row| row[-1] }
+  end
+
+  def self.south_edge(r)
+    r[-r[0]..-1]
+  end
+
+  def self.west_edge(r)
+    r[2..-1].each_slice(r[0]).collect{|row| row[0] }
+  end
+
   def self.dump(room)
     w, h = room[0..1]
     room[2..-1].each_slice(w) do |row|
