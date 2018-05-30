@@ -28,6 +28,24 @@ module Room
     room
   end
 
+  # Join r1 and r2 along the specified edge.
+  def self.join(r1, edge, r2)
+    case edge
+    when :north
+      shift = Row.midpoint(Row.longest_wall(north_edge(r1))) - Row.midpoint(Row.longest_wall(south_edge(r2)))
+      place(:merge, r1, r2, shift, -r2[1] + 2)
+    when :east
+      shift = Row.midpoint(Row.longest_wall(east_edge(r1))) - Row.midpoint(Row.longest_wall(west_edge(r2)))
+      place(:merge, r1, r2, r1[0] - 2, shift)
+    when :south
+      shift = Row.midpoint(Row.longest_wall(south_edge(r1))) - Row.midpoint(Row.longest_wall(north_edge(r2)))
+      place(:merge, r1, r2, shift, r1[1] - 2)
+    when :west
+      shift = Row.midpoint(Row.longest_wall(west_edge(r1))) - Row.midpoint(Row.longest_wall(east_edge(r2)))
+      place(:merge, r1, r2, -r2[0] + 2, shift)
+    end
+  end
+
   # Takes a room and returns the row along its northern edge
   def self.north_edge(r)
     r[2..-1].each_slice(r[0]).first

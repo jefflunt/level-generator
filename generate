@@ -6,9 +6,11 @@ require 'merger'
 
 Room.dump(room1 = Room.gen(10, 3..9, 3..9, 2..12, 3..12))
 Room.dump(room2 = Room.gen(10, 3..9, 3..9, 2..12, 3..12))
-puts "mp1 ne: #{Row.midpoint(Row.longest_wall(Room.north_edge(room1)))}"
-puts "mp1 ee: #{Row.midpoint(Row.longest_wall(Room.east_edge(room1)))}"
-puts "mp1 se: #{Row.midpoint(Row.longest_wall(Room.south_edge(room1)))}"
-puts "mp1 we: #{Row.midpoint(Row.longest_wall(Room.west_edge(room1)))}"
 puts "\n---\n\n"
-Room.dump(Room.join_n(room1, :north, room2))
+Room.dump(Room.join(room1, :north, room2))
+puts "\n---\n\n"
+Room.dump(Room.join(room1, :east, room2))
+puts "\n---\n\n"
+Room.dump(Room.join(room1, :south, room2))
+puts "\n---\n\n"
+Room.dump(Room.join(room1, :west, room2))
