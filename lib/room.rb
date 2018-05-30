@@ -28,22 +28,27 @@ module Room
     room
   end
 
+  # Takes a room and returns the row along its northern edge
   def self.north_edge(r)
     r[2..-1].each_slice(r[0]).first
   end
 
+  # Takes a room and returns the row along its east edge.
   def self.east_edge(r)
     r[2..-1].each_slice(r[0]).collect{|row| row[-1] }
   end
 
+  # Takes a room and returns the row along its south edge.
   def self.south_edge(r)
     r[-r[0]..-1]
   end
 
+  # Takes a room and returns the row along its west edge.
   def self.west_edge(r)
     r[2..-1].each_slice(r[0]).collect{|row| row[0] }
   end
 
+  # Prints a room to STDOUT.
   def self.dump(room)
     w, h = room[0..1]
     room[2..-1].each_slice(w) do |row|
@@ -54,6 +59,7 @@ module Room
     end
   end
 
+  # Creates a rectangle of the specified width and height.
   def self.rect(w, h)
     r = [w, h]
     r << [1] * w
@@ -62,6 +68,9 @@ module Room
     r.flatten
   end
 
+  # Places r2 into/onto r1, at coordinates (x, y) relative to r1's
+  # top-left corner, using the specified operation (:merge, or
+  # :overwrite).
   def self.place(op, r1, r2, x, y)
     fw, fh = r1[0..1]
     rw, rh = r2[0..1]
@@ -82,6 +91,7 @@ module Room
     new_r1
   end
 
+  # Horizontally flips the room.
   def self.hflip(room)
     rw, rh = room[0..1]
 
@@ -89,18 +99,19 @@ module Room
     new_room.unshift([rw, rh]).flatten
   end
 
+  # Vertically flips the room.
   def self.vflip(room)
     transpose(hflip(transpose(room)))
   end
 
-  # Normal transpose, rows to columns, along the top-left-to-bottom-right axis
+  # Transposes rows to columns along the top-left-to-bottom-right axis
   def self.transpose(room)
     rw, rh = room[0..1]
 
     new_room = room[2..-1].each_slice(rw).map{|row| row}.transpose.unshift([rh, rw]).flatten
   end
 
-  # Cross transpose, rows to columns, along the top-right-to-bottom-left axis
+  # Cross transpose rows to columns along the top-right-to-bottom-left axis
   def self.xtranspose(room)
     hflip(transpose(hflip(room)))
   end
@@ -118,6 +129,8 @@ module Room
     new_r1
   end
 
+  # Removes padding from all four sides, leaving a room that fills the smallest
+  # rectangle dimensions possible.
   def self.trim(room)
     nr = copy(room)
 
@@ -129,10 +142,13 @@ module Room
     nr
   end
 
+  # Creates a complete, deep copy of a room.
   def self.copy(room)
     Marshal.load(Marshal.dump(room))
   end
 
+  # Adds padding to the top, right, bottom, and left edges. Padding of 0 adds no
+  # padding to the specified side.
   def self.pad(room, t, r, b, l)
     pad_top(
       pad_rgt(
@@ -146,6 +162,7 @@ module Room
     )
   end
 
+  # Add padding only to the left side.
   def self.pad_lft(room, count)
     new_room = []
     orig_fw = room[0]
@@ -158,6 +175,7 @@ module Room
     new_room.flatten
   end
 
+  # Add padding only to the right side.
   def self.pad_rgt(room, count)
     new_room = []
     orig_fw = room[0]
@@ -170,6 +188,7 @@ module Room
     new_room.flatten
   end
 
+  # Add padding only to the top side.
   def self.pad_top(room, count)
     new_room = []
     new_fw = room[0]
@@ -183,6 +202,7 @@ module Room
     new_room.flatten
   end
 
+  # Add padding only to the bottom side.
   def self.pad_bot(room, count)
     new_room = []
     new_fw = room[0]
@@ -196,6 +216,7 @@ module Room
     new_room.flatten
   end
 
+  # Delete the entire left column.
   def self.del_lft(room)
     rw, rh = room[0..1]
     new_room = []
@@ -207,6 +228,7 @@ module Room
     new_room.unshift([rw - 1, rh]).flatten
   end
 
+  # Delete the entire right column.
   def self.del_rgt(room)
     rw, rh = room[0..1]
     new_room = []
@@ -218,31 +240,37 @@ module Room
     new_room.unshift([rw - 1, rh]).flatten
   end
 
+  # Delete the entire top row.
   def self.del_top(room)
     rw, rh = room[0..1]
     [[rw, rh - 1], room[(2 + rw)..-1]].flatten
   end
 
+  # Delete the entire bottom row.
   def self.del_bot(room)
     rw, rh = room[0..1]
     [[rw, rh - 1], room[2..(-rw - 1)]].flatten
   end
 
+  # Is the left column made of only emptiness?
   def self.empty_lft?(room)
     rw = room[0]
     room[2..-1].each_slice(rw).all?{|row| row[0] == -1 }
   end
 
+  # Is the right column made of only emptiness?
   def self.empty_rgt?(room)
     rw = room[0]
     room[2..-1].each_slice(rw).all?{|row| row[-1] == -1 }
   end
 
+  # Is the top row made of only emptiness?
   def self.empty_top?(room)
     rw = room[0]
     room[2..-1].each_slice(rw).first.all?{|cell| cell == -1 }
   end
 
+  # Is the bottom row made of only emptiness?
   def self.empty_bot?(room)
     rw = room[0]
     room[-rw..-1].all?{|cell| cell == -1 }
