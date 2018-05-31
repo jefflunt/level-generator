@@ -23,9 +23,9 @@ module Row
 
     wall = nil
     r.each_with_index do |c, i|
-      if wall.nil? && c == 1
+      if wall.nil? && c == Room::LAND
         wall = i
-      elsif wall && c != 1
+      elsif wall && c != Room::LAND
         ws = [ws, wall..(i - 1)].flatten
         wall = nil
       end

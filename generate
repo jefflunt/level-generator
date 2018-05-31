@@ -2,15 +2,6 @@
 $LOAD_PATH.unshift 'lib'
 require 'room'
 require 'row'
-require 'merger'
 
-Room.dump(room1 = Room.gen(10, 3..9, 3..9, 2..12, 3..12))
-Room.dump(room2 = Room.gen(10, 3..9, 3..9, 2..12, 3..12))
-puts "\n---\n\n"
-Room.dump(Room.join(room1, :north, room2))
-puts "\n---\n\n"
-Room.dump(Room.join(room1, :east, room2))
-puts "\n---\n\n"
-Room.dump(Room.join(room1, :south, room2))
-puts "\n---\n\n"
-Room.dump(Room.join(room1, :west, room2))
+globe = Room.gen(10, 3..9, 3..9, 2..12, 3..12)
+Room.dump(globe)

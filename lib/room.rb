@@ -1,9 +1,7 @@
 module Room
-  TOKENS = {
-    -1 => '.',
-    0 => ' ',
-    1 => 'X'
-  }
+  TOKENS = [' ', '▓']
+  VOID = 0
+  LAND = 1
 
   ##
   # r - int, number of rectangles to add
@@ -80,9 +78,9 @@ module Room
   # Creates a rectangle of the specified width and height.
   def self.rect(w, h)
     r = [w, h]
-    r << [1] * w
-    (h - 2).times{ r << [1, [0] * (w - 2), 1] }
-    r << [1] * w
+    r << [LAND] * w
+    (h - 2).times{ r << [1, [LAND] * (w - 2), 1] }
+    r << [LAND] * w
     r.flatten
   end
 
@@ -102,11 +100,17 @@ module Room
       i = 2 + (y * new_fw) + x
       r1_range = i..(i + rw - 1)
       r1_row = new_r1[r1_range]
-      new_r1[r1_range] = Merger.send(op, r1_row, r2_row)
+      new_r1[r1_range] = merge(r1_row, r2_row)
+
       y = y + 1
     end
 
     new_r1
+  end
+
+  # Merges r2 on top of r1, where the largest value wins.
+  def self.merge(r1, r2)
+    r1.map.with_index{|c, i| [c, r2[i]].max }
   end
 
   # Horizontally flips the room.
@@ -187,7 +191,7 @@ module Room
     new_fw = orig_fw + count
     new_fh = room[1]
 
-    room[2..-1].each_slice(orig_fw){|row| new_room << ([-1] * count) + row }
+    room[2..-1].each_slice(orig_fw){|row| new_room << ([VOID] * count) + row }
 
     new_room.unshift([new_fw, new_fh])
     new_room.flatten
@@ -200,7 +204,7 @@ module Room
     new_fw = orig_fw + count
     new_fh = room[1]
 
-    room[2..-1].each_slice(orig_fw){|row| new_room << row + ([-1] * count) }
+    room[2..-1].each_slice(orig_fw){|row| new_room << row + ([VOID] * count) }
 
     new_room.unshift([new_fw, new_fh])
     new_room.flatten
@@ -211,7 +215,7 @@ module Room
     new_room = []
     new_fw = room[0]
     new_fh = room[1] + count
-    new_row = [-1] * new_fw
+    new_row = [VOID] * new_fw
 
     new_room << new_row * count
     room[2..-1].each_slice(new_fw){|row| new_room << row }
@@ -225,7 +229,7 @@ module Room
     new_room = []
     new_fw = room[0]
     new_fh = room[1] + count
-    new_row = [-1] * new_fw
+    new_row = [VOID] * new_fw
 
     room[2..-1].each_slice(new_fw){|row| new_room << row }
     new_room << new_row * count
@@ -273,24 +277,24 @@ module Room
   # Is the left column made of only emptiness?
   def self.empty_lft?(room)
     rw = room[0]
-    room[2..-1].each_slice(rw).all?{|row| row[0] == -1 }
+    room[2..-1].each_slice(rw).all?{|row| row[0] == VOID }
   end
 
   # Is the right column made of only emptiness?
   def self.empty_rgt?(room)
     rw = room[0]
-    room[2..-1].each_slice(rw).all?{|row| row[-1] == -1 }
+    room[2..-1].each_slice(rw).all?{|row| row[-1] == VOID }
   end
 
   # Is the top row made of only emptiness?
   def self.empty_top?(room)
     rw = room[0]
-    room[2..-1].each_slice(rw).first.all?{|cell| cell == -1 }
+    room[2..-1].each_slice(rw).first.all?{|cell| cell == VOID }
   end
 
   # Is the bottom row made of only emptiness?
   def self.empty_bot?(room)
     rw = room[0]
-    room[-rw..-1].all?{|cell| cell == -1 }
+    room[-rw..-1].all?{|cell| cell == VOID }
   end
 end
