@@ -29,38 +29,38 @@ module Room
   # Join r1 and r2 along the specified edge.
   def self.join(r1, edge, r2)
     case edge
-    when :north
-      shift = Row.midpoint(Row.longest_wall(north_edge(r1))) - Row.midpoint(Row.longest_wall(south_edge(r2)))
+    when :top
+      shift = Row.midpoint(Row.longest_wall(top_edge(r1))) - Row.midpoint(Row.longest_wall(bot_edge(r2)))
       place(:merge, r1, r2, shift, -r2[1] + 2)
-    when :east
-      shift = Row.midpoint(Row.longest_wall(east_edge(r1))) - Row.midpoint(Row.longest_wall(west_edge(r2)))
+    when :rgt
+      shift = Row.midpoint(Row.longest_wall(rgt_edge(r1))) - Row.midpoint(Row.longest_wall(lft_edge(r2)))
       place(:merge, r1, r2, r1[0] - 2, shift)
-    when :south
-      shift = Row.midpoint(Row.longest_wall(south_edge(r1))) - Row.midpoint(Row.longest_wall(north_edge(r2)))
+    when :bot
+      shift = Row.midpoint(Row.longest_wall(bot_edge(r1))) - Row.midpoint(Row.longest_wall(top_edge(r2)))
       place(:merge, r1, r2, shift, r1[1] - 2)
-    when :west
-      shift = Row.midpoint(Row.longest_wall(west_edge(r1))) - Row.midpoint(Row.longest_wall(east_edge(r2)))
+    when :lft
+      shift = Row.midpoint(Row.longest_wall(lft_edge(r1))) - Row.midpoint(Row.longest_wall(rgt_edge(r2)))
       place(:merge, r1, r2, -r2[0] + 2, shift)
     end
   end
 
-  # Takes a room and returns the row along its northern edge
-  def self.north_edge(r)
+  # Takes a room and returns the row along its top edge
+  def self.top_edge(r)
     r[2..-1].each_slice(r[0]).first
   end
 
-  # Takes a room and returns the row along its east edge.
-  def self.east_edge(r)
+  # Takes a room and returns the row along its rgt edge.
+  def self.rgt_edge(r)
     r[2..-1].each_slice(r[0]).collect{|row| row[-1] }
   end
 
-  # Takes a room and returns the row along its south edge.
-  def self.south_edge(r)
+  # Takes a room and returns the row along its bot edge.
+  def self.bot_edge(r)
     r[-r[0]..-1]
   end
 
-  # Takes a room and returns the row along its west edge.
-  def self.west_edge(r)
+  # Takes a room and returns the row along its lft edge.
+  def self.lft_edge(r)
     r[2..-1].each_slice(r[0]).collect{|row| row[0] }
   end
 
