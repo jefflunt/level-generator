@@ -3,5 +3,4 @@ $LOAD_PATH.unshift 'lib'
 require 'room'
 require 'row'
 
-globe = Room.gen(10, 3..9, 3..9, 2..12, 3..12)
-Room.dump(globe)
+Room.dump(Room.gen(10, 3..9, 3..9, 2..12, 3..12))
